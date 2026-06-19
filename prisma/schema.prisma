@@ -1,0 +1,63 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Role {
+  id    Int    @id @default(autoincrement())
+  name  String @unique
+  users User[]
+
+  @@map("roles")
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  name      String
+  email     String   @unique
+  password  String?
+  roleId    Int      @map("role_id")
+  role      Role     @relation(fields: [roleId], references: [id])
+  photos    Photo[]
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("users")
+}
+
+model Photo {
+  id        Int      @id @default(autoincrement())
+  userId    Int?     @map("user_id")
+  user      User?    @relation(fields: [userId], references: [id])
+  url       String
+  type      String?
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("photos")
+}
+
+model Laboratory {
+  id          Int      @id @default(autoincrement())
+  name        String   @unique
+  description String?
+  image       String?
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@map("laboratories")
+}
+
+model Gallery {
+  id        Int      @id @default(autoincrement())
+  title     String
+  imageUrl  String   @map("image_url")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("gallery")
+}
