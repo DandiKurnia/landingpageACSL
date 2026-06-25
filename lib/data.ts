@@ -8,6 +8,9 @@ export type LabRegion = {
   address: string;
   description: string;
   image: string;
+  // Search query handed to the Google Maps embed so the pin lands on the
+  // right campus without needing an API key.
+  mapQuery: string;
 };
 
 export type GalleryItem = {
@@ -31,6 +34,7 @@ export const LAB_REGIONS: LabRegion[] = [
       "Pusat kegiatan praktikum ACSL dengan jadwal terpadat dan perangkat jaringan terbaru.",
     image:
       "https://images.unsplash.com/photo-1581094288338-2314dddb7ece?auto=format&fit=crop&w=1200&q=80",
+    mapQuery: "Universitas Gunadarma Kampus D, Jl. Margonda Raya, Depok",
   },
   {
     name: "Kalimalang",
@@ -40,6 +44,8 @@ export const LAB_REGIONS: LabRegion[] = [
       "Melayani praktikum wilayah Bekasi dengan fokus jaringan komputer dan komputasi bergerak.",
     image:
       "https://images.unsplash.com/photo-1581094271901-8022df4466f9?auto=format&fit=crop&w=1200&q=80",
+    mapQuery:
+      "Universitas Gunadarma Kampus E, Jl. KH. Noer Ali, Kalimalang, Bekasi",
   },
   {
     name: "Karawaci",
@@ -49,6 +55,7 @@ export const LAB_REGIONS: LabRegion[] = [
       "Simpul riset terapan untuk eksperimen FPGA dan pengembangan perangkat keras.",
     image:
       "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1200&q=80",
+    mapQuery: "Universitas Gunadarma Kampus Karawaci, Jl. Imam Bonjol, Tangerang",
   },
 ];
 
