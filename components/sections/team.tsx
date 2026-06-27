@@ -54,13 +54,14 @@ export function TeamSection() {
         {/* Member grid */}
         <ul className="mt-14 grid grid-cols-2 gap-x-6 gap-y-10 sm:grid-cols-3 lg:grid-cols-4">
           {members.map((member) => (
-            <li key={member.name} className="flex flex-col gap-4">
-              <div className="relative overflow-hidden rounded-2xl ring-1 ring-[#0E1116]/8">
+            <li key={member.name} className="group flex flex-col gap-4">
+              <div className="relative overflow-hidden rounded-xl ring-1 ring-[#0E1116]/8 shadow-sm transition-shadow duration-500 ease-out group-hover:shadow-md">
                 <img
                   src={member.avatar}
                   alt={`${member.name}, ${member.role} di region ${member.region}`}
-                  className="aspect-square w-full object-cover"
+                  className="aspect-[3/4] w-full object-cover object-top transition-transform duration-500 ease-out group-hover:scale-[1.04] motion-reduce:transition-none"
                   loading="lazy"
+                  style={{ imageRendering: "auto" }}
                 />
                 <span className="absolute left-3 top-3 inline-flex items-center rounded-full bg-white/90 px-2.5 py-1 font-mono text-[10px] uppercase tracking-[0.14em] text-[#0E1116] backdrop-blur-sm">
                   {member.region}

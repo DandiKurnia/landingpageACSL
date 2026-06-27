@@ -9,8 +9,11 @@ const geist = Geist({ subsets: ["latin"], variable: "--font-sans" });
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "ACSL",
+  title: "ACSL - Advanced Computing and Systems Laboratory",
   description: "Advanced Computing and Systems Laboratory",
+  icons: {
+    icon: "/images/logo.svg",
+  },
 };
 
 export default function RootLayout({

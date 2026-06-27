@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { GoArrowUpRight } from "react-icons/go";
 
@@ -53,15 +54,13 @@ export function FooterSection() {
               href="/"
               className="inline-flex w-fit items-center gap-2.5 rounded-sm focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#0066FF]"
             >
-              <span
-                aria-hidden
-                className="grid size-8 place-items-center rounded-lg bg-[#0066FF] font-mono text-[13px] font-semibold tracking-tight text-white shadow-[0_8px_24px_-12px_rgba(0,102,255,0.6)]"
-              >
-                A
-              </span>
-              <span className="text-[18px] font-semibold tracking-[-0.02em] text-[#0E1116]">
-                ACSL
-              </span>
+              <Image
+                src="/images/logo.png"
+                alt="Logo ACSL"
+                width={70}
+                height={70}
+                className="rounded-lg"
+              />
             </Link>
 
             <p className="max-w-[42ch] text-pretty text-[15px] leading-[1.65] text-[#3F4753]">

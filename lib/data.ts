@@ -7,7 +7,6 @@ export type LabRegion = {
   campus: string;
   address: string;
   description: string;
-  image: string;
   // Search query handed to the Google Maps embed so the pin lands on the
   // right campus without needing an API key.
   mapQuery: string;
@@ -31,31 +30,26 @@ export const LAB_REGIONS: LabRegion[] = [
     campus: "Kampus D",
     address: "Jl. Margonda Raya, Pondok Cina, Depok",
     description:
-      "Pusat kegiatan praktikum ACSL dengan jadwal terpadat dan perangkat jaringan terbaru.",
-    image:
-      "https://images.unsplash.com/photo-1581094288338-2314dddb7ece?auto=format&fit=crop&w=1200&q=80",
+      "Pusat kegiatan praktikum Sistem Komputer dan Teknik Komputer.",
     mapQuery: "Universitas Gunadarma Kampus D, Jl. Margonda Raya, Depok",
   },
   {
     name: "Kalimalang",
-    campus: "Kampus E",
-    address: "Jl. KH. Noer Ali, Kalimalang, Bekasi",
+    campus: "Kampus J3",
+    address: "Plaza Niaga Kalimas, Jl. Inspeksi Saluran Kalimalang, Bekasi",
     description:
-      "Melayani praktikum wilayah Bekasi dengan fokus jaringan komputer dan komputasi bergerak.",
-    image:
-      "https://images.unsplash.com/photo-1581094271901-8022df4466f9?auto=format&fit=crop&w=1200&q=80",
+      "Pusat kegiatan praktikum Sistem Komputer dan Teknik Komputer.",
     mapQuery:
-      "Universitas Gunadarma Kampus E, Jl. KH. Noer Ali, Kalimalang, Bekasi",
+      "Gunadarma University Campus J3",
   },
   {
     name: "Karawaci",
     campus: "Kampus K",
-    address: "Jl. Imam Bonjol, Karawaci, Tangerang",
+    address: "Jl. Kelapa Dua Raya, Karawaci, Tangerang",
     description:
-      "Simpul riset terapan untuk eksperimen FPGA dan pengembangan perangkat keras.",
-    image:
-      "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1200&q=80",
-    mapQuery: "Universitas Gunadarma Kampus Karawaci, Jl. Imam Bonjol, Tangerang",
+      "Pusat kegiatan praktikum Sistem Komputer dan Teknik Komputer.",
+    mapQuery:
+      "Universitas Gunadarma Kampus Karawaci, Jl. Kelapa Dua Raya, Tangerang",
   },
 ];
 
@@ -99,49 +93,49 @@ export const TEAM_MEMBERS: TeamMember[] = [
     name: "Rizky",
     role: "Asisten JKD",
     region: "Depok",
-    avatar: "/images/asisten/rizky.jpg",
+    avatar: "/images/asisten/rizky.png",
   },
   {
     name: "Siti Aminah",
     role: "Asisten JKD",
     region: "Depok",
-    avatar: "/images/asisten/rizky.jpg",
+    avatar: "/images/asisten/rizky.png",
   },
   {
     name: "Siti Aminah",
     role: "Asisten JKD",
     region: "Depok",
-    avatar: "/images/asisten/rizky.jpg",
+    avatar: "/images/asisten/rizky.png",
   },
   {
     name: "Siti Aminah",
     role: "Asisten JKD",
     region: "Depok",
-    avatar: "/images/asisten/rizky.jpg",
+    avatar: "/images/asisten/rizky.png",
   },
   {
     name: "Siti Aminah",
     role: "Asisten JKD",
     region: "Depok",
-    avatar: "/images/asisten/rizky.jpg",
+    avatar: "/images/asisten/rizky.png",
   },
   {
     name: "Andi Wijaya",
     role: "Asisten JKL",
     region: "Kalimalang",
-    avatar: "https://i.pravatar.cc/400?u=andi@webacsl.com",
+    avatar: "/images/asisten/rizky.png",
   },
   {
     name: "Andi Wijaya",
     role: "Asisten JKL",
     region: "Kalimalang",
-    avatar: "https://i.pravatar.cc/400?u=andi@webacsl.com",
+    avatar: "/images/asisten/rizky.png",
   },
   {
     name: "Andi Wijaya",
     role: "Asisten JKL",
     region: "Kalimalang",
-    avatar: "https://i.pravatar.cc/400?u=andi@webacsl.com",
+    avatar: "/images/asisten/rizky.png",
   },
   {
     name: "Andi Wijaya",

@@ -302,34 +302,33 @@ const CardNav: React.FC<CardNavProps> = ({
 
         <div
           className={cn(
-            "card-nav-content absolute left-0 right-0 top-[60px] bottom-0 p-2 flex flex-col items-stretch gap-2 justify-start z-[1]",
+            "card-nav-content absolute left-0 right-0 top-[60px] bottom-0 p-4 flex flex-col items-stretch gap-5 justify-start z-[1]",
             isExpanded
               ? "visible pointer-events-auto"
               : "invisible pointer-events-none",
-            "md:flex-row md:items-end md:gap-[12px]",
+            "md:flex-row md:items-start md:gap-[24px] md:p-6 md:pt-8",
           )}
           aria-hidden={!isExpanded}
         >
           {items.map((item, idx) => (
             <div
               key={`${item.label}-${idx}`}
-              className="nav-card select-none relative flex flex-col gap-2 p-[14px_18px] rounded-[calc(0.75rem-0.2rem)] min-w-0 flex-[1_1_auto] h-auto min-h-[64px] md:h-full md:min-h-0 md:flex-[1_1_0%]"
+              className="select-none relative flex flex-col gap-3 min-w-0 flex-[1_1_auto] md:flex-[1_1_0%]"
               ref={setCardRef(idx)}
-              style={{ backgroundColor: item.bgColor, color: item.textColor }}
             >
-              <div className="nav-card-label font-medium tracking-[-0.02em] text-[18px] md:text-[20px] leading-[1.15]">
+              <div className="font-mono text-[10px] font-semibold tracking-[0.18em] uppercase text-[#0E1116]/40 border-b border-[#0E1116]/8 pb-2">
                 {item.label}
               </div>
-              <div className="nav-card-links mt-auto flex flex-col gap-[4px]">
+              <div className="flex flex-col gap-2">
                 {item.links?.map((lnk, i) => (
                   <a
                     key={`${lnk.label}-${i}`}
-                    className="nav-card-link inline-flex items-center gap-[6px] no-underline cursor-pointer transition-opacity duration-300 hover:opacity-75 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-current text-[14px] md:text-[15px] leading-[1.3]"
+                    className="inline-flex items-center gap-[6px] no-underline cursor-pointer transition-colors duration-200 text-[14px] font-medium leading-[1.3] text-[#3F4753] hover:text-[#0066FF] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0066FF]"
                     href={lnk.href}
                     aria-label={lnk.ariaLabel ?? lnk.label}
                   >
                     <GoArrowUpRight
-                      className="nav-card-link-icon shrink-0"
+                      className="shrink-0 size-3.5 text-[#0E1116]/30 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
                       aria-hidden="true"
                     />
                     {lnk.label}

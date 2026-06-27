@@ -87,7 +87,10 @@ function RegionRow({ region, campus, members }: RegionGroup) {
       <div className="py-12 lg:py-16">
         <header className="container mx-auto flex max-w-[1240px] items-end justify-between gap-6 px-4">
           <div className="flex flex-col">
-            <span aria-hidden className="h-0.5 w-10 rounded-full bg-[#F5C24A]" />
+            <span
+              aria-hidden
+              className="h-0.5 w-10 rounded-full bg-[#F5C24A]"
+            />
             <h2 className="mt-4 text-[clamp(1.4rem,2.4vw,1.9rem)] font-semibold leading-[1.1] tracking-[-0.03em] text-[#0E1116]">
               {region}
             </h2>
@@ -119,7 +122,7 @@ function RegionRow({ region, campus, members }: RegionGroup) {
           ref={scrollerRef}
           tabIndex={0}
           aria-label={`Daftar asisten region ${region}`}
-          className="no-scrollbar acsl-fade-x mt-10 flex gap-x-6 overflow-x-auto px-4 focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-[#0066FF]"
+          className="no-scrollbar acsl-fade-x mt-6 flex gap-x-6 overflow-x-auto px-4 py-4 focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-[#0066FF]"
         >
           {track.map((member, i) => (
             <MemberCard
@@ -174,13 +177,14 @@ function MemberCard({
       aria-hidden={decorative || undefined}
       className="group/card flex w-[200px] shrink-0 flex-col gap-4 sm:w-[220px]"
     >
-      <div className="relative overflow-hidden rounded-2xl ring-1 ring-[#0E1116]/8">
+      <div className="relative overflow-hidden rounded-xl ring-1 ring-[#0E1116]/8 shadow-sm transition-shadow duration-500 ease-out group-hover/card:shadow-md">
         <img
           src={member.avatar}
           alt={decorative ? "" : `${member.name}, ${member.role}`}
           draggable={false}
-          className="aspect-square w-full object-cover transition-transform duration-500 ease-out group-hover/card:scale-[1.04] motion-reduce:transition-none motion-reduce:group-hover/card:scale-100"
+          className="aspect-[3/4] w-full object-cover object-top transition-transform duration-500 ease-out group-hover/card:scale-[1.04] motion-reduce:transition-none motion-reduce:group-hover/card:scale-100"
           loading="lazy"
+          style={{ imageRendering: "auto" }}
         />
       </div>
       <div className="flex flex-col gap-0.5">
