@@ -5,28 +5,33 @@ import { roleLabel } from "@/lib/roles";
 import ScrollReveal from "@/components/ScrollReveal";
 
 export async function TeamSection() {
-  const dbUsers = await prisma.user.findMany({
-    where: {
-      NOT: {
-        email: "admin@webacsl.com",
-      },
-    },
-    select: {
-      name: true,
-      region: true,
-      role: {
-        select: {
-          name: true,
+  let dbUsers: any[] = [];
+  try {
+    dbUsers = await prisma.user.findMany({
+      where: {
+        NOT: {
+          email: "admin@webacsl.com",
         },
       },
-      photos: {
-        where: { type: "profile" },
-        select: { url: true },
-        take: 1,
+      select: {
+        name: true,
+        region: true,
+        role: {
+          select: {
+            name: true,
+          },
+        },
+        photos: {
+          where: { type: "profile" },
+          select: { url: true },
+          take: 1,
+        },
+        createdAt: true,
       },
-      createdAt: true,
-    },
-  });
+    });
+  } catch (error) {
+    console.error("Failed to fetch team members for landing page:", error);
+  }
 
   // Prioritize showing roles starting with 'ketua_' (Ketua JKL, Ketua JKD, etc.)
   const sortedUsers = [...dbUsers].sort((a, b) => {
