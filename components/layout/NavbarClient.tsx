@@ -20,18 +20,6 @@ const items: CardNavItem[] = [
     ],
   },
   {
-    label: "Laboratories",
-    bgColor: "#1A1F2A",
-    textColor: "#FFFFFF",
-    links: [
-      {
-        label: "Daftar Lab",
-        href: "/",
-        ariaLabel: "Daftar laboratorium",
-      },
-    ],
-  },
-  {
     label: "Team",
     bgColor: "#3A2A1F",
     textColor: "#F5C24A",
@@ -60,7 +48,7 @@ export default function NavbarClient() {
       baseColor="#FAFAFA"
       buttonBgColor="#0066FF"
       buttonTextColor="#FFFFFF"
-      ctaHref="/laboratories"
+      ctaHref="/team"
     />
   );
 }

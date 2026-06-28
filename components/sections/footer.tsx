@@ -11,16 +11,7 @@ const NAV_GROUPS: {
     heading: "Jelajahi",
     links: [
       { label: "Tentang", href: "/#about" },
-      { label: "Galeri", href: "/#gallery" },
-      { label: "Tim Asisten", href: "/#team" },
-    ],
-  },
-  {
-    heading: "Laboratorium",
-    links: [
-      { label: "Semua Lab", href: "/laboratories" },
-      { label: "Penelitian", href: "/laboratories#penelitian" },
-      { label: "Jadwal Praktikum", href: "/laboratories" },
+      { label: "Tim Asisten", href: "/team" },
     ],
   },
 ];
