@@ -46,6 +46,11 @@ export async function login(
     return { error: "Email atau kata sandi salah.", email };
   }
 
+  // Only 'admin' role is allowed to access the dashboard.
+  if (user.role.name !== "admin") {
+    return { error: "Email atau kata sandi salah.", email };
+  }
+
   await createSession({ userId: user.id, role: user.role.name });
   redirect("/dashboard");
 }

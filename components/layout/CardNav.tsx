@@ -4,6 +4,7 @@ import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { GoArrowUpRight } from "react-icons/go";
 import { cn } from "@/lib/utils";
+import Link from "next/link";
 
 export type CardNavLink = {
   label: string;
@@ -41,7 +42,7 @@ const DEFAULT_BUTTON_TEXT = "#FFFFFF";
 
 const CardNav: React.FC<CardNavProps> = ({
   logo,
-  logoAlt = "ACSL",
+  logoAlt = "Advanced Computing and System Laboratory",
   items,
   className = "",
   ease = "power3.out",
@@ -285,8 +286,8 @@ const CardNav: React.FC<CardNavProps> = ({
             />
           </div>
 
-          <a
-            href=""
+          <Link
+            href="/"
             className="logo-container flex items-center md:absolute md:left-1/2 md:top-1/2 md:-translate-x-1/2 md:-translate-y-1/2 order-1 md:order-none select-none"
             aria-label={logoAlt}
           >
@@ -297,7 +298,7 @@ const CardNav: React.FC<CardNavProps> = ({
                 </span>
               </span>
             )}
-          </a>
+          </Link>
         </div>
 
         <div

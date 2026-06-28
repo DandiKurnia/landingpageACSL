@@ -4,7 +4,7 @@ import { getSession } from "@/lib/session";
 import { roleLabel } from "@/lib/roles";
 
 export const metadata: Metadata = {
-  title: "Ringkasan · Dasbor ACSL",
+  title: "Dashboard ACSL",
 };
 
 type Overview = {

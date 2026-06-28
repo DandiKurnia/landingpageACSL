@@ -84,12 +84,6 @@ export function LoginForm() {
           >
             Kata sandi
           </label>
-          <a
-            href="#"
-            className="text-[12.5px] font-medium text-[#0066FF] underline-offset-2 transition-colors duration-200 hover:text-[#0057db] hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0066FF]"
-          >
-            Lupa sandi?
-          </a>
         </div>
         <div className="relative flex items-center">
           <input
@@ -109,7 +103,11 @@ export function LoginForm() {
             className="absolute right-3.5 text-[#0E1116]/35 hover:text-[#0E1116]/60 transition-colors focus:outline-none"
             aria-label={showPassword ? "Sembunyikan sandi" : "Tampilkan sandi"}
           >
-            {showPassword ? <GoEyeClosed className="size-5" /> : <GoEye className="size-5" />}
+            {showPassword ? (
+              <GoEyeClosed className="size-5" />
+            ) : (
+              <GoEye className="size-5" />
+            )}
           </button>
         </div>
       </div>

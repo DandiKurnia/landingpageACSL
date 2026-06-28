@@ -13,6 +13,13 @@ export default async function DashboardLayout({
   const session = await getSession();
   if (!session) redirect("/login");
 
+  // Secondary layout guard: only 'admin' role is allowed
+  if (session.role !== "admin") {
+    const { destroySession } = await import("@/lib/session");
+    await destroySession();
+    redirect("/login");
+  }
+
   // Identity for the sidebar footer. If the DB is unreachable we still render
   // the shell using whatever the session carries, rather than 500-ing.
   let identity = { name: "Aslab", role: session.role };
