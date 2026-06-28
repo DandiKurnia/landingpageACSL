@@ -8,7 +8,7 @@ services:
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: webacsl
     ports:
-      - "5433:5432"
+      - "5435:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
@@ -22,7 +22,7 @@ services:
     container_name: webacsl_app
     restart: unless-stopped
     ports:
-      - "3005:3000" # Port eksternal diarahkan ke 3080 sesuai port dev lokal Anda
+      - "3080:3000" # Port eksternal diarahkan ke 3080 sesuai port dev lokal Anda
     environment:
       DATABASE_URL: postgresql://postgres:postgres@postgres:5432/webacsl # Diubah ke database webacsl
       NODE_ENV: production
