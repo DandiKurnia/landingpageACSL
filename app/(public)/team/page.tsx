@@ -3,6 +3,8 @@ import { roleLabel } from "@/lib/roles";
 import { RegionRoster } from "@/components/team/RegionRoster";
 import ScrollReveal from "@/components/ScrollReveal";
 
+export const dynamic = "force-dynamic";
+
 export const metadata = {
   title: "Tim · ACSL",
   description:
