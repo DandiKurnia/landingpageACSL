@@ -10,6 +10,7 @@ export type LabRegion = {
   // Search query handed to the Google Maps embed so the pin lands on the
   // right campus without needing an API key.
   mapQuery: string;
+  image: string;
 };
 
 export type GalleryItem = {
@@ -32,6 +33,7 @@ export const LAB_REGIONS: LabRegion[] = [
     description:
       "Pusat kegiatan praktikum Sistem Komputer dan Teknik Komputer.",
     mapQuery: "Universitas Gunadarma Kampus D, Jl. Margonda Raya, Depok",
+    image: "https://picsum.photos/seed/depok/600/800",
   },
   {
     name: "Kalimalang",
@@ -41,6 +43,7 @@ export const LAB_REGIONS: LabRegion[] = [
       "Pusat kegiatan praktikum Sistem Komputer dan Teknik Komputer.",
     mapQuery:
       "Gunadarma University Campus J3",
+    image: "https://picsum.photos/seed/kalimalang/600/800",
   },
   {
     name: "Karawaci",
@@ -50,6 +53,7 @@ export const LAB_REGIONS: LabRegion[] = [
       "Pusat kegiatan praktikum Sistem Komputer dan Teknik Komputer.",
     mapQuery:
       "Universitas Gunadarma Kampus Karawaci, Jl. Kelapa Dua Raya, Tangerang",
+    image: "https://picsum.photos/seed/karawaci/600/800",
   },
 ];
 

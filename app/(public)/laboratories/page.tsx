@@ -1,7 +1,5 @@
 import Link from "next/link";
 import { GoArrowUpRight } from "react-icons/go";
-import { prisma } from "@/lib/prisma";
-import type { Laboratory } from "@/types";
 
 export const metadata = {
   title: "Laboratorium · ACSL",
@@ -49,29 +47,8 @@ const REGIONS: Region[] = [
   },
 ];
 
-async function getLaboratories(): Promise<Laboratory[]> {
-  try {
-    return await prisma.laboratory.findMany({ orderBy: { createdAt: "asc" } });
-  } catch {
-    // DB unavailable (e.g. local design work) — fall back to static copy.
-    return [];
-  }
-}
-
-export default async function LaboratoriesPage() {
-  const labs = await getLaboratories();
-
-  const regions = REGIONS.map((region) => {
-    const match = labs.find(
-      (lab) => lab.name.toLowerCase() === region.name.toLowerCase(),
-    );
-    return {
-      ...region,
-      id: match?.id ?? null,
-      description: match?.description ?? region.description,
-      image: match?.image ?? region.image,
-    };
-  });
+export default function LaboratoriesPage() {
+  const regions = REGIONS;
 
   return (
     <main className="bg-white">
@@ -130,9 +107,6 @@ export default async function LaboratoriesPage() {
         <ul className="container mx-auto max-w-[1240px] px-4">
           {regions.map((region, i) => {
             const reversed = i % 2 === 1;
-            const detailHref = region.id
-              ? `/laboratories/${region.id}`
-              : "/laboratories";
 
             return (
               <li
@@ -178,7 +152,7 @@ export default async function LaboratoriesPage() {
                   </p>
 
                   <Link
-                    href={detailHref}
+                    href="/laboratories"
                     className="group/link mt-7 inline-flex w-fit items-center gap-2 text-[14px] font-medium text-[#0066FF] transition-colors duration-200 hover:text-[#0052cc] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0066FF]"
                   >
                     Lihat detail {region.name}

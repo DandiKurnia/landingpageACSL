@@ -87,6 +87,14 @@
   --radius-2xl: calc(var(--radius) * 1.8);
   --radius-3xl: calc(var(--radius) * 2.2);
   --radius-4xl: calc(var(--radius) * 2.6);
+
+  /* Semantic z-index scale — never reach for arbitrary 999/9999. */
+  --z-index-dropdown: 10;
+  --z-index-sticky: 20;
+  --z-index-modal-backdrop: 30;
+  --z-index-modal: 40;
+  --z-index-toast: 50;
+  --z-index-tooltip: 60;
 }
 
 body {

@@ -1,12 +1,3 @@
-export type Laboratory = {
-  id: number;
-  name: string;
-  description: string | null;
-  image: string | null;
-  createdAt: Date;
-  updatedAt: Date;
-};
-
 export type Gallery = {
   id: number;
   title: string;

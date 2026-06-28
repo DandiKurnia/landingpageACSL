@@ -1,6 +1,10 @@
 "use client";
 
+import { usePathname } from "next/navigation";
 import CardNav, { type CardNavItem } from "./CardNav";
+
+// Routes that own their full-screen chrome and must not show the marketing nav.
+const HIDDEN_PREFIXES = ["/login", "/dashboard"];
 
 const items: CardNavItem[] = [
   {
@@ -71,6 +75,11 @@ const items: CardNavItem[] = [
 ];
 
 export default function NavbarClient() {
+  const pathname = usePathname();
+  if (HIDDEN_PREFIXES.some((p) => pathname === p || pathname.startsWith(`${p}/`))) {
+    return null;
+  }
+
   return (
     <CardNav
       items={items}
