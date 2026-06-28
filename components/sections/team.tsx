@@ -1,9 +1,50 @@
 import Link from "next/link";
 import { GoArrowUpRight } from "react-icons/go";
-import { TEAM_MEMBERS } from "@/lib/data";
+import { prisma } from "@/lib/prisma";
+import { roleLabel } from "@/lib/roles";
 
-export function TeamSection() {
-  const members = TEAM_MEMBERS.slice(0, 8);
+export async function TeamSection() {
+  const dbUsers = await prisma.user.findMany({
+    where: {
+      NOT: {
+        email: "admin@webacsl.com",
+      },
+    },
+    select: {
+      name: true,
+      region: true,
+      role: {
+        select: {
+          name: true,
+        },
+      },
+      photos: {
+        where: { type: "profile" },
+        select: { url: true },
+        take: 1,
+      },
+      createdAt: true,
+    },
+  });
+
+  // Prioritize showing roles starting with 'ketua_' (Ketua JKL, Ketua JKD, etc.)
+  const sortedUsers = [...dbUsers].sort((a, b) => {
+    const aIsKetua = a.role.name.startsWith("ketua_");
+    const bIsKetua = b.role.name.startsWith("ketua_");
+
+    if (aIsKetua && !bIsKetua) return -1;
+    if (!aIsKetua && bIsKetua) return 1;
+
+    // Within same category, sort by newest registered first
+    return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+  });
+
+  const members = sortedUsers.slice(0, 8).map((u) => ({
+    name: u.name,
+    region: u.region || "Semua Region",
+    role: roleLabel(u.role.name),
+    avatar: u.photos[0]?.url || `https://i.pravatar.cc/400?u=${encodeURIComponent(u.name)}`,
+  }));
 
   return (
     <section

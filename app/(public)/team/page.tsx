@@ -1,4 +1,5 @@
-import { TEAM_MEMBERS } from "@/lib/data";
+import { prisma } from "@/lib/prisma";
+import { roleLabel } from "@/lib/roles";
 import { RegionRoster } from "@/components/team/RegionRoster";
 
 export const metadata = {
@@ -16,14 +17,45 @@ const REGION_CAMPUS: Record<string, string> = {
   Karawaci: "Kampus Karawaci",
 };
 
-export default function TeamPage() {
+export default async function TeamPage() {
+  // Fetch all users including roles and photos from the database
+  const dbUsers = await prisma.user.findMany({
+    where: {
+      NOT: {
+        email: "admin@webacsl.com",
+      },
+    },
+    orderBy: { name: "asc" },
+    select: {
+      name: true,
+      region: true,
+      role: {
+        select: {
+          name: true,
+        },
+      },
+      photos: {
+        where: { type: "profile" },
+        select: { url: true },
+        take: 1,
+      },
+    },
+  });
+
+  const members = dbUsers.map((u) => ({
+    name: u.name,
+    region: u.region || "Semua Region",
+    role: roleLabel(u.role.name),
+    avatar: u.photos[0]?.url || `https://i.pravatar.cc/400?u=${encodeURIComponent(u.name)}`,
+  }));
+
   const byRegion = REGION_ORDER.map((region) => ({
     region,
     campus: REGION_CAMPUS[region],
-    members: TEAM_MEMBERS.filter((m) => m.region === region),
+    members: members.filter((m) => m.region === region),
   })).filter((group) => group.members.length > 0);
 
-  const regionCount = new Set(TEAM_MEMBERS.map((m) => m.region)).size;
+  const regionCount = new Set(members.map((m) => m.region)).size;
 
   return (
     <main className="bg-white">
@@ -57,7 +89,7 @@ export default function TeamPage() {
             <div className="flex items-baseline gap-2">
               <dt className="text-[#0E1116]/60">Anggota</dt>
               <dd className="font-mono text-[#0E1116]">
-                {TEAM_MEMBERS.length}
+                {members.length}
               </dd>
             </div>
             <div className="flex items-baseline gap-2">

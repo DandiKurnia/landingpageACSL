@@ -51,15 +51,15 @@ export function DashboardLayoutClient({
               }}
               className={`size-9 items-center justify-center rounded-lg border border-slate-200 text-slate-500 hover:bg-slate-50 hover:text-slate-800 transition-colors focus-visible:outline-2 focus-visible:outline-[#0066FF] ${
                 collapsed ? "lg:flex" : "lg:hidden"
-              } ${
-                openMobile ? "hidden" : "flex"
-              }`}
-              aria-label={collapsed ? "Tampilkan sidebar" : "Sembunyikan sidebar"}
+              } ${openMobile ? "hidden" : "flex"}`}
+              aria-label={
+                collapsed ? "Tampilkan sidebar" : "Sembunyikan sidebar"
+              }
             >
               <GoGrabber className="size-5" />
             </button>
             <span className="font-sans text-[15px] font-semibold text-slate-800 tracking-tight">
-              Dasbor ACSL
+              Dashboard ACSL
             </span>
           </div>
 

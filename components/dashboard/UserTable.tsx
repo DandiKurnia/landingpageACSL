@@ -22,6 +22,7 @@ interface User {
   region: string | null;
   createdAt: string;
   role: string;
+  avatar?: string | null;
 }
 
 interface UserTableProps {
@@ -44,6 +45,10 @@ export function UserTable({ initialUsers }: UserTableProps) {
   const [regionFilter, setRegionFilter] = useState("all");
   const [roleFilter, setRoleFilter] = useState("all");
 
+  // Pagination states
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(5);
+
   // Modal States
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
@@ -58,7 +63,35 @@ export function UserTable({ initialUsers }: UserTableProps) {
   
   // Drag and drop states
   const [dragActive, setDragActive] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // Upload file to S3/MinIO via API
+  const uploadFile = async (file: File) => {
+    try {
+      setIsUploading(true);
+      const formData = new FormData();
+      formData.append("file", file);
+
+      const res = await fetch("/api/upload", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!res.ok) {
+        throw new Error("Gagal mengunggah gambar");
+      }
+
+      const data = await res.json();
+      setAvatarPreview(data.url);
+    } catch (err) {
+      console.error(err);
+      alert("Gagal mengunggah gambar ke MinIO S3.");
+    } finally {
+      setIsUploading(false);
+    }
+  };
 
   // Prevent background scrolling when a modal is open
   useEffect(() => {
@@ -105,6 +138,19 @@ export function UserTable({ initialUsers }: UserTableProps) {
       return matchesSearch && matchesRegion && matchesRole;
     });
   }, [users, search, regionFilter, roleFilter]);
+
+  // Reset page when filters or page limit changes
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [search, regionFilter, roleFilter, itemsPerPage]);
+
+  const totalPages = Math.max(Math.ceil(filteredUsers.length / itemsPerPage), 1);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+
+  // Paginated users based on pagination states
+  const paginatedUsers = useMemo(() => {
+    return filteredUsers.slice(startIndex, startIndex + itemsPerPage);
+  }, [filteredUsers, startIndex, itemsPerPage]);
 
   const clearFilters = () => {
     setSearch("");
@@ -154,8 +200,7 @@ export function UserTable({ initialUsers }: UserTableProps) {
     if (e.dataTransfer.files && e.dataTransfer.files[0]) {
       const file = e.dataTransfer.files[0];
       if (file.type.startsWith("image/")) {
-        const url = URL.createObjectURL(file);
-        setAvatarPreview(url);
+        uploadFile(file);
       }
     }
   };
@@ -164,8 +209,7 @@ export function UserTable({ initialUsers }: UserTableProps) {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
       if (file.type.startsWith("image/")) {
-        const url = URL.createObjectURL(file);
-        setAvatarPreview(url);
+        uploadFile(file);
       }
     }
   };
@@ -188,7 +232,7 @@ export function UserTable({ initialUsers }: UserTableProps) {
     setFormEmail(user.email);
     setFormRegion(user.region ?? "Depok");
     setFormRole(user.role);
-    setAvatarPreview(null); // Clear previous preview
+    setAvatarPreview(user.avatar || null);
     setIsFormOpen(true);
   };
 
@@ -198,48 +242,90 @@ export function UserTable({ initialUsers }: UserTableProps) {
     setIsDeleteOpen(true);
   };
 
-  // Save changes (Mock Create/Edit)
-  const handleSave = (e: React.FormEvent) => {
+  // Save changes (DB Create/Edit)
+  const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formName.trim() || !formEmail.trim()) return;
 
-    if (selectedUser) {
-      // Edit User
-      setUsers((prev) =>
-        prev.map((u) =>
-          u.id === selectedUser.id
-            ? {
-                ...u,
-                name: formName,
-                email: formEmail,
-                region: formRegion === "None" ? null : formRegion,
-                role: formRole,
-              }
-            : u
-        )
-      );
-    } else {
-      // Create User
-      const newId = users.length > 0 ? Math.max(...users.map((u) => u.id)) + 1 : 1;
-      const newUser: User = {
-        id: newId,
-        name: formName,
-        email: formEmail,
-        region: formRegion === "None" ? null : formRegion,
-        role: formRole,
-        createdAt: new Date().toISOString(),
-      };
-      setUsers((prev) => [newUser, ...prev]);
+    try {
+      setIsSaving(true);
+      if (selectedUser) {
+        // Edit User in DB
+        const res = await fetch(`/api/users/${selectedUser.id}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            name: formName,
+            email: formEmail,
+            region: formRegion,
+            role: formRole,
+            avatar: avatarPreview,
+          }),
+        });
+
+        if (!res.ok) {
+          const errData = await res.json();
+          throw new Error(errData.error || "Gagal memperbarui user");
+        }
+
+        const updatedUser = await res.json();
+        setUsers((prev) =>
+          prev.map((u) => (u.id === selectedUser.id ? updatedUser : u))
+        );
+      } else {
+        // Create User in DB
+        const res = await fetch("/api/users", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            name: formName,
+            email: formEmail,
+            region: formRegion,
+            role: formRole,
+            avatar: avatarPreview,
+          }),
+        });
+
+        if (!res.ok) {
+          const errData = await res.json();
+          throw new Error(errData.error || "Gagal membuat user");
+        }
+
+        const newUser = await res.json();
+        setUsers((prev) => [newUser, ...prev]);
+      }
+      setIsFormOpen(false);
+    } catch (err: any) {
+      console.error(err);
+      alert(err.message || "Gagal menyimpan perubahan ke database.");
+    } finally {
+      setIsSaving(false);
     }
-    setIsFormOpen(false);
   };
 
-  // Confirm delete (Mock Delete)
-  const handleDelete = () => {
+  // Confirm delete (DB Delete)
+  const handleDelete = async () => {
     if (!selectedUser) return;
-    setUsers((prev) => prev.filter((u) => u.id !== selectedUser.id));
-    setIsDeleteOpen(false);
-    setSelectedUser(null);
+    try {
+      setIsSaving(true);
+      const res = await fetch(`/api/users/${selectedUser.id}`, {
+        method: "DELETE",
+      });
+
+      if (!res.ok) {
+        const errData = await res.json();
+        throw new Error(errData.error || "Gagal menghapus user");
+      }
+
+      setUsers((prev) => prev.filter((u) => u.id !== selectedUser.id));
+      setIsDeleteOpen(false);
+      setSelectedUser(null);
+    } catch (err: any) {
+      console.error(err);
+      alert(err.message || "Gagal menghapus user dari database.");
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   return (
@@ -340,7 +426,8 @@ export function UserTable({ initialUsers }: UserTableProps) {
             </p>
           </div>
         ) : (
-          <div className="overflow-x-auto">
+          <>
+            <div className="overflow-x-auto">
             <table className="w-full border-collapse text-left text-[13.5px] text-slate-600">
               <thead>
                 <tr className="border-b border-slate-100 bg-slate-50/75 text-[11px] font-bold uppercase tracking-wider text-slate-500">
@@ -362,7 +449,7 @@ export function UserTable({ initialUsers }: UserTableProps) {
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100">
-                {filteredUsers.map((user) => (
+                {paginatedUsers.map((user) => (
                   <tr
                     key={user.id}
                     className="hover:bg-slate-50/50 transition-colors"
@@ -370,12 +457,20 @@ export function UserTable({ initialUsers }: UserTableProps) {
                     {/* Name & Email (Avatar included) */}
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-3">
-                        <span
-                          aria-hidden
-                          className="flex size-9 shrink-0 items-center justify-center rounded-full bg-[#0066FF]/8 text-[12px] font-bold text-[#0066FF] ring-1 ring-[#0066FF]/10"
-                        >
-                          {initials(user.name)}
-                        </span>
+                        {user.avatar ? (
+                          <img
+                            src={user.avatar}
+                            alt={user.name}
+                            className="size-9 shrink-0 rounded-full object-cover border border-slate-100 ring-1 ring-slate-200"
+                          />
+                        ) : (
+                          <span
+                            aria-hidden
+                            className="flex size-9 shrink-0 items-center justify-center rounded-full bg-[#0066FF]/8 text-[12px] font-bold text-[#0066FF] ring-1 ring-[#0066FF]/10"
+                          >
+                            {initials(user.name)}
+                          </span>
+                        )}
                         <div className="flex flex-col min-w-0">
                           <span className="font-semibold text-slate-900 truncate">
                             {user.name}
@@ -444,6 +539,92 @@ export function UserTable({ initialUsers }: UserTableProps) {
               </tbody>
             </table>
           </div>
+
+          {/* Pagination Controls */}
+          {filteredUsers.length > 0 && (
+            <div className="flex flex-col md:flex-row items-center justify-between gap-4 px-6 py-4 border-t border-slate-100 bg-slate-50/20">
+              {/* Items per Page Selector */}
+              <div className="flex items-center gap-2">
+                <span className="text-[12.5px] text-slate-500 font-medium">Tampilkan</span>
+                <select
+                  value={itemsPerPage}
+                  onChange={(e) => {
+                    setItemsPerPage(Number(e.target.value));
+                    setCurrentPage(1);
+                  }}
+                  className="px-2 py-1 text-[12.5px] rounded-lg border border-slate-200 bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-[#0066FF]/20 focus:border-[#0066FF] cursor-pointer"
+                >
+                  <option value={5}>5</option>
+                  <option value={10}>10</option>
+                  <option value={20}>20</option>
+                  <option value={50}>50</option>
+                </select>
+                <span className="text-[12.5px] text-slate-500 font-medium">data per halaman</span>
+              </div>
+
+              {/* Navigation Info & Buttons */}
+              <div className="flex flex-col sm:flex-row items-center gap-4">
+                <span className="text-[12.5px] text-slate-500">
+                  Menampilkan <span className="font-semibold text-slate-700">{startIndex + 1}</span> - <span className="font-semibold text-slate-700">{Math.min(startIndex + itemsPerPage, filteredUsers.length)}</span> dari <span className="font-semibold text-slate-700">{filteredUsers.length}</span> user
+                </span>
+                
+                <div className="flex items-center gap-1">
+                  <button
+                    type="button"
+                    disabled={currentPage === 1}
+                    onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
+                    className="px-3 py-1.5 text-[12.5px] font-semibold text-slate-600 hover:bg-slate-50 disabled:opacity-40 disabled:hover:bg-transparent disabled:cursor-not-allowed rounded-lg border border-slate-200 transition-colors"
+                  >
+                    Sebelumnya
+                  </button>
+                  
+                  {/* Page Numbers */}
+                  {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => {
+                    // Only show first page, last page, current page, and pages around current page
+                    if (
+                      totalPages > 6 &&
+                      page !== 1 &&
+                      page !== totalPages &&
+                      Math.abs(page - currentPage) > 1
+                    ) {
+                      // Render dots if there's a gap
+                      if (page === 2 && currentPage > 3) {
+                        return <span key="dots-start" className="px-1.5 text-slate-400 text-[12px]">...</span>;
+                      }
+                      if (page === totalPages - 1 && currentPage < totalPages - 2) {
+                        return <span key="dots-end" className="px-1.5 text-slate-400 text-[12px]">...</span>;
+                      }
+                      return null;
+                    }
+                    return (
+                      <button
+                        key={page}
+                        type="button"
+                        onClick={() => setCurrentPage(page)}
+                        className={`size-8 flex items-center justify-center text-[12.5px] font-semibold rounded-lg transition-all ${
+                          currentPage === page
+                            ? "bg-[#0066FF] text-white shadow-sm shadow-[#0066FF]/10 font-bold"
+                            : "text-slate-600 hover:bg-slate-50 border border-slate-200"
+                        }`}
+                      >
+                        {page}
+                      </button>
+                    );
+                  })}
+                  
+                  <button
+                    type="button"
+                    disabled={currentPage === totalPages}
+                    onClick={() => setCurrentPage((p) => Math.min(p + 1, totalPages))}
+                    className="px-3 py-1.5 text-[12.5px] font-semibold text-slate-600 hover:bg-slate-50 disabled:opacity-40 disabled:hover:bg-transparent disabled:cursor-not-allowed rounded-lg border border-slate-200 transition-colors"
+                  >
+                    Selanjutnya
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+          </>
         )}
       </div>
 
@@ -547,7 +728,15 @@ export function UserTable({ initialUsers }: UserTableProps) {
                           className="hidden"
                         />
 
-                        {avatarPreview ? (
+                        {isUploading ? (
+                          /* Uploading Spinner */
+                          <div className="flex flex-col items-center justify-center border-2 border-dashed border-[#0066FF]/40 rounded-xl p-6 bg-[#0066FF]/5">
+                            <span className="animate-spin size-6 border-2 border-[#0066FF] border-t-transparent rounded-full mb-2"></span>
+                            <p className="text-[12.5px] font-semibold text-slate-700">
+                              Sedang mengunggah ke MinIO...
+                            </p>
+                          </div>
+                        ) : avatarPreview ? (
                           /* Image Preview Mode */
                           <div className="relative flex items-center justify-between border border-slate-200 rounded-lg p-3 bg-slate-50/50">
                             <div className="flex items-center gap-3">
@@ -558,7 +747,7 @@ export function UserTable({ initialUsers }: UserTableProps) {
                               />
                               <div>
                                 <span className="block text-[12.5px] font-semibold text-slate-800">Preview Berhasil</span>
-                                <span className="block text-[11px] text-[#0066FF] font-medium">Gambar siap diunggah</span>
+                                <span className="block text-[11px] text-[#0066FF] font-medium font-sans">Tersimpan di S3 MinIO</span>
                               </div>
                             </div>
                             <button
@@ -608,9 +797,10 @@ export function UserTable({ initialUsers }: UserTableProps) {
                         </button>
                         <button
                           type="submit"
-                          className="px-4 py-2 text-[13px] font-semibold text-white bg-[#0066FF] hover:bg-[#0055DD] rounded-lg transition-colors shadow-sm shadow-[#0066FF]/10"
+                          disabled={isSaving || isUploading}
+                          className="px-4 py-2 text-[13px] font-semibold text-white bg-[#0066FF] hover:bg-[#0055DD] disabled:bg-[#0066FF]/60 disabled:cursor-not-allowed rounded-lg transition-colors shadow-sm shadow-[#0066FF]/10"
                         >
-                          {selectedUser ? "Simpan Perubahan" : "Simpan User"}
+                          {isSaving ? "Menyimpan..." : selectedUser ? "Simpan Perubahan" : "Simpan User"}
                         </button>
                       </div>
                     </form>
@@ -650,9 +840,10 @@ export function UserTable({ initialUsers }: UserTableProps) {
                       <button
                         type="button"
                         onClick={handleDelete}
-                        className="px-4 py-2 text-[13px] font-semibold text-white bg-rose-600 hover:bg-rose-700 rounded-lg transition-colors shadow-sm shadow-rose-600/10"
+                        disabled={isSaving}
+                        className="px-4 py-2 text-[13px] font-semibold text-white bg-rose-600 hover:bg-rose-700 disabled:bg-rose-600/60 disabled:cursor-not-allowed rounded-lg transition-colors shadow-sm shadow-rose-600/10"
                       >
-                        Ya, Hapus
+                        {isSaving ? "Menghapus..." : "Ya, Hapus"}
                       </button>
                     </div>
                   </div>

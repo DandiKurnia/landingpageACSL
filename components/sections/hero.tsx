@@ -1,6 +1,7 @@
 import CardSwap, { Card } from "@/components/CardSwap";
 import Link from "next/link";
 import { GoArrowUpRight } from "react-icons/go";
+import { prisma } from "@/lib/prisma";
 
 type HeroImage = {
   src: string;
@@ -30,7 +31,20 @@ function HeroImageCard({ img }: { img: HeroImage }) {
   );
 }
 
-export default function HeroSection() {
+export default async function HeroSection() {
+  let aslabCount = 28; // Fallback value
+  try {
+    aslabCount = await prisma.user.count({
+      where: {
+        NOT: {
+          email: "admin@webacsl.com",
+        },
+      },
+    });
+  } catch (error) {
+    console.error("Failed to fetch aslab count for hero:", error);
+  }
+
   return (
     <section
       id="home"
@@ -102,7 +116,7 @@ export default function HeroSection() {
           <dl className="mt-2 flex flex-wrap gap-x-8 gap-y-3 border-t border-[#0E1116]/8 pt-5 text-[13px] text-[#3F4753]">
             <div className="flex items-baseline gap-2">
               <dt className="text-[#0E1116]/60">Asisten</dt>
-              <dd className="font-mono text-[#0E1116]">28</dd>
+              <dd className="font-mono text-[#0E1116]">{aslabCount}</dd>
             </div>
             <div className="flex items-baseline gap-2">
               <dt className="text-[#0E1116]/60">Mata Pelajaran</dt>

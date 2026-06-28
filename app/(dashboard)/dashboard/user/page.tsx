@@ -27,6 +27,11 @@ export default async function UserDashboardPage() {
           name: true,
         },
       },
+      photos: {
+        where: { type: "profile" },
+        select: { url: true },
+        take: 1,
+      },
     },
   });
 
@@ -38,6 +43,7 @@ export default async function UserDashboardPage() {
     region: u.region,
     createdAt: u.createdAt.toISOString(),
     role: u.role.name,
+    avatar: u.photos[0]?.url || null,
   }));
 
   return (

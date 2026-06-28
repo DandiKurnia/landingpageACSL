@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import {
   GoHome,
   GoPerson,
+  GoPeople,
   GoSignOut,
   GoGrabber,
   GoX,
@@ -19,7 +20,8 @@ type NavItem = {
 
 const NAV: NavItem[] = [
   { label: "Dashboard", href: "/dashboard", icon: GoHome },
-  { label: "User", href: "/dashboard/user", icon: GoPerson },
+  { label: "User", href: "/dashboard/user", icon: GoPeople },
+  { label: "Profil Saya", href: "/dashboard/profile", icon: GoPerson },
 ];
 
 function initials(name: string): string {

@@ -1,8 +1,8 @@
 "use client";
 
-import { useActionState, useId } from "react";
+import { useActionState, useId, useState } from "react";
 import { useFormStatus } from "react-dom";
-import { GoArrowRight } from "react-icons/go";
+import { GoArrowRight, GoEye, GoEyeClosed } from "react-icons/go";
 import { login, type LoginState } from "./actions";
 
 function SubmitButton() {
@@ -30,6 +30,7 @@ function SubmitButton() {
 
 export function LoginForm() {
   const [state, formAction] = useActionState<LoginState, FormData>(login, {});
+  const [showPassword, setShowPassword] = useState(false);
   const emailId = useId();
   const passwordId = useId();
   const errorId = useId();
@@ -90,17 +91,27 @@ export function LoginForm() {
             Lupa sandi?
           </a>
         </div>
-        <input
-          id={passwordId}
-          name="password"
-          type="password"
-          autoComplete="current-password"
-          required
-          aria-invalid={state.error ? true : undefined}
-          aria-describedby={state.error ? errorId : undefined}
-          placeholder="••••••••"
-          className="h-12 rounded-xl border border-[#0E1116]/14 bg-white px-4 text-[15px] text-[#0E1116] shadow-[0_1px_2px_rgba(14,17,22,0.04)] transition-[border-color,box-shadow] duration-200 ease-out placeholder:text-[#0E1116]/35 hover:border-[#0E1116]/24 focus:border-[#0066FF] focus:outline-none focus:ring-4 focus:ring-[#0066FF]/12"
-        />
+        <div className="relative flex items-center">
+          <input
+            id={passwordId}
+            name="password"
+            type={showPassword ? "text" : "password"}
+            autoComplete="current-password"
+            required
+            aria-invalid={state.error ? true : undefined}
+            aria-describedby={state.error ? errorId : undefined}
+            placeholder="••••••••"
+            className="h-12 w-full rounded-xl border border-[#0E1116]/14 bg-white pl-4 pr-11 text-[15px] text-[#0E1116] shadow-[0_1px_2px_rgba(14,17,22,0.04)] transition-[border-color,box-shadow] duration-200 ease-out placeholder:text-[#0E1116]/35 hover:border-[#0E1116]/24 focus:border-[#0066FF] focus:outline-none focus:ring-4 focus:ring-[#0066FF]/12"
+          />
+          <button
+            type="button"
+            onClick={() => setShowPassword((prev) => !prev)}
+            className="absolute right-3.5 text-[#0E1116]/35 hover:text-[#0E1116]/60 transition-colors focus:outline-none"
+            aria-label={showPassword ? "Sembunyikan sandi" : "Tampilkan sandi"}
+          >
+            {showPassword ? <GoEyeClosed className="size-5" /> : <GoEye className="size-5" />}
+          </button>
+        </div>
       </div>
 
       <SubmitButton />
