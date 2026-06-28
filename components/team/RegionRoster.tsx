@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react";
 import { GoArrowLeft, GoArrowRight } from "react-icons/go";
 import type { TeamMember } from "@/lib/data";
+import ScrollReveal from "@/components/ScrollReveal";
 
 export type RegionGroup = {
   region: string;
@@ -85,38 +86,40 @@ function RegionRow({ region, campus, members }: RegionGroup) {
   return (
     <div className="border-t border-[#0E1116]/10">
       <div className="py-12 lg:py-16">
-        <header className="container mx-auto flex max-w-[1240px] items-end justify-between gap-6 px-4">
-          <div className="flex flex-col">
-            <span
-              aria-hidden
-              className="h-0.5 w-10 rounded-full bg-[#F5C24A]"
-            />
-            <h2 className="mt-4 text-[clamp(1.4rem,2.4vw,1.9rem)] font-semibold leading-[1.1] tracking-[-0.03em] text-[#0E1116]">
-              {region}
-            </h2>
-            <p className="mt-2 font-mono text-[12px] text-[#0E1116]/55">
-              {campus}
-            </p>
-          </div>
-
-          <div className="flex shrink-0 items-center gap-4">
-            <span className="font-mono text-[12px] text-[#3F4753]">
-              {members.length} asisten
-            </span>
-            <div className="flex items-center gap-2">
-              <PagerButton
-                direction="prev"
-                onClick={() => page(-1)}
-                region={region}
+        <ScrollReveal variant="up" delay={50} duration={600}>
+          <header className="container mx-auto flex max-w-[1240px] items-end justify-between gap-6 px-4">
+            <div className="flex flex-col">
+              <span
+                aria-hidden
+                className="h-0.5 w-10 rounded-full bg-[#F5C24A]"
               />
-              <PagerButton
-                direction="next"
-                onClick={() => page(1)}
-                region={region}
-              />
+              <h2 className="mt-4 text-[clamp(1.4rem,2.4vw,1.9rem)] font-semibold leading-[1.1] tracking-[-0.03em] text-[#0E1116]">
+                {region}
+              </h2>
+              <p className="mt-2 font-mono text-[12px] text-[#0E1116]/55">
+                {campus}
+              </p>
             </div>
-          </div>
-        </header>
+
+            <div className="flex shrink-0 items-center gap-4">
+              <span className="font-mono text-[12px] text-[#3F4753]">
+                {members.length} asisten
+              </span>
+              <div className="flex items-center gap-2">
+                <PagerButton
+                  direction="prev"
+                  onClick={() => page(-1)}
+                  region={region}
+                />
+                <PagerButton
+                  direction="next"
+                  onClick={() => page(1)}
+                  region={region}
+                />
+              </div>
+            </div>
+          </header>
+        </ScrollReveal>
 
         <ul
           ref={scrollerRef}
@@ -130,6 +133,7 @@ function RegionRow({ region, campus, members }: RegionGroup) {
               key={`${member.name}-${i}`}
               member={member}
               decorative={i >= members.length}
+              index={i}
             />
           ))}
         </ul>
@@ -158,7 +162,7 @@ function PagerButton({
           ? `Asisten sebelumnya, region ${region}`
           : `Asisten berikutnya, region ${region}`
       }
-      className="inline-flex size-11 items-center justify-center rounded-full text-[#0E1116] ring-1 ring-[#0E1116]/12 transition-[color,background-color,box-shadow] duration-200 ease-out hover:bg-[#0066FF] hover:text-white hover:ring-[#0066FF] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0066FF]"
+      className="inline-flex size-11 items-center justify-center rounded-full text-[#0E1116] ring-1 ring-[#0E1116]/12 transition-[color,background-color,box-shadow,transform] duration-200 ease-out hover:bg-[#0066FF] hover:text-white hover:ring-[#0066FF] hover:scale-[1.06] active:scale-95 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0066FF]"
     >
       <Icon aria-hidden className="size-4" />
     </button>
@@ -168,21 +172,20 @@ function PagerButton({
 function MemberCard({
   member,
   decorative = false,
+  index = 0,
 }: {
   member: TeamMember;
   decorative?: boolean;
+  index?: number;
 }) {
-  return (
-    <li
-      aria-hidden={decorative || undefined}
-      className="group/card flex w-[200px] shrink-0 flex-col gap-4 sm:w-[220px]"
-    >
+  const cardContent = (
+    <>
       <div className="relative overflow-hidden rounded-xl ring-1 ring-[#0E1116]/8 shadow-sm transition-shadow duration-500 ease-out group-hover/card:shadow-md">
         <img
           src={member.avatar}
           alt={decorative ? "" : `${member.name}, ${member.role}`}
           draggable={false}
-          className="aspect-[3/4] w-full object-cover object-top transition-transform duration-500 ease-out group-hover/card:scale-[1.04] motion-reduce:transition-none motion-reduce:group-hover/card:scale-100"
+          className="aspect-[3/4] w-full object-cover object-top transition-transform duration-600 [transition-timing-function:cubic-bezier(0.16,1,0.3,1)] group-hover/card:scale-[1.04] motion-reduce:transition-none motion-reduce:group-hover/card:scale-100"
           loading="lazy"
           style={{ imageRendering: "auto" }}
         />
@@ -193,6 +196,29 @@ function MemberCard({
         </span>
         <span className="text-[13px] text-[#3F4753]">{member.role}</span>
       </div>
-    </li>
+    </>
+  );
+
+  const className = "group/card flex w-[200px] shrink-0 flex-col gap-4 sm:w-[220px]";
+
+  if (decorative) {
+    return (
+      <li aria-hidden="true" className={className}>
+        {cardContent}
+      </li>
+    );
+  }
+
+  return (
+    <ScrollReveal
+      as="li"
+      variant="up"
+      delay={Math.min(index * 60, 480)}
+      duration={650}
+      threshold={0.01}
+      className={className}
+    >
+      {cardContent}
+    </ScrollReveal>
   );
 }

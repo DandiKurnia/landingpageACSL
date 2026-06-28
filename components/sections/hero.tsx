@@ -2,6 +2,7 @@ import CardSwap, { Card } from "@/components/CardSwap";
 import Link from "next/link";
 import { GoArrowUpRight } from "react-icons/go";
 import { prisma } from "@/lib/prisma";
+import ScrollReveal from "@/components/ScrollReveal";
 
 type HeroImage = {
   src: string;
@@ -64,65 +65,78 @@ export default async function HeroSection() {
       <div className="container mx-auto grid max-w-[1240px] grid-cols-1 items-center gap-10 px-4 pt-24 pb-16 sm:pt-28 lg:grid-cols-[minmax(0,1fr)_minmax(0,520px)] lg:gap-12 lg:pt-32 lg:pb-24">
         {/* Left: content */}
         <div className="flex flex-col gap-7 sm:gap-8">
-          <span className="inline-flex w-fit items-center gap-2 font-mono text-[11px] uppercase tracking-[0.22em] text-[#0066FF]">
-            <span aria-hidden className="size-1.5 rounded-full bg-[#0066FF]" />
-            Laboratorium · Universitas Gunadarma
-          </span>
-
-          <h1
-            id="hero-heading"
-            className="text-balance text-[clamp(2.4rem,5.4vw,4.5rem)] font-semibold leading-[1.04] tracking-[-0.04em] text-[#0E1116]"
-          >
-            Selamat Datang di Laboratorium{" "}
-            <span className="relative whitespace-nowrap text-[#0066FF]">
-              ACSL
-              <svg
+          <ScrollReveal delay={100} duration={600}>
+            <span className="inline-flex w-fit items-center gap-2 font-mono text-[11px] uppercase tracking-[0.22em] text-[#0066FF]">
+              <span
                 aria-hidden
-                viewBox="0 0 200 12"
-                preserveAspectRatio="none"
-                className="absolute inset-x-0 -bottom-2 h-2.5 w-full text-[#F5C24A]"
-              >
-                <path
-                  d="M2 8 C 60 2, 140 2, 198 8"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="3"
-                  strokeLinecap="round"
-                />
-              </svg>
-            </span>
-          </h1>
-
-          <p className="max-w-[58ch] text-pretty text-[15.5px] leading-[1.6] text-[#3F4753] sm:text-[17px]">
-            ACSL adalah laboratorium riset mahasiswa Universitas Gunadarma —
-            tempat belajar mata pelajaran Praktikum Jaringan Komputer Dasar,
-            Praktikum Jaringan Komputer Lanjut, Praktikum Komputasi Bergerak,
-            dan Praktikum Field Programmable Gate Array.
-          </p>
-
-          <div className="flex flex-wrap items-center gap-3 pt-1">
-            <Link
-              href="/laboratories"
-              className="mt-2 inline-flex w-fit items-center gap-1 text-[13px] font-medium text-[#0066FF] hover:underline"
-            >
-              Lihat Lab
-              <GoArrowUpRight
-                className="size-4 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
-                aria-hidden
+                className="size-1.5 rounded-full bg-[#0066FF]"
               />
-            </Link>
-          </div>
+              Laboratorium · Universitas Gunadarma
+            </span>
+          </ScrollReveal>
 
-          <dl className="mt-2 flex flex-wrap gap-x-8 gap-y-3 border-t border-[#0E1116]/8 pt-5 text-[13px] text-[#3F4753]">
-            <div className="flex items-baseline gap-2">
-              <dt className="text-[#0E1116]/60">Asisten</dt>
-              <dd className="font-mono text-[#0E1116]">{aslabCount}</dd>
+          <ScrollReveal delay={220} duration={700}>
+            <h1
+              id="hero-heading"
+              className="text-balance text-[clamp(2.4rem,5.4vw,4.5rem)] font-semibold leading-[1.04] tracking-[-0.04em] text-[#0E1116]"
+            >
+              Selamat Datang di Laboratorium{" "}
+              <span className="relative whitespace-nowrap text-[#0066FF]">
+                ACSL
+                <svg
+                  aria-hidden
+                  viewBox="0 0 200 12"
+                  preserveAspectRatio="none"
+                  className="absolute inset-x-0 -bottom-2 h-2.5 w-full text-[#F5C24A]"
+                >
+                  <path
+                    d="M2 8 C 60 2, 140 2, 198 8"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="3"
+                    strokeLinecap="round"
+                  />
+                </svg>
+              </span>
+            </h1>
+          </ScrollReveal>
+
+          <ScrollReveal delay={340} duration={750}>
+            <p className="max-w-[58ch] text-pretty text-[15.5px] leading-[1.6] text-[#3F4753] sm:text-[17px]">
+              ACSL adalah laboratorium riset mahasiswa Universitas Gunadarma —
+              tempat belajar mata pelajaran Praktikum Jaringan Komputer Dasar,
+              Praktikum Jaringan Komputer Lanjut, Praktikum Komputasi Bergerak,
+              dan Praktikum Field Programmable Gate Array.
+            </p>
+          </ScrollReveal>
+
+          {/* <ScrollReveal delay={460} duration={600}>
+            <div className="flex flex-wrap items-center gap-3 pt-1">
+              <Link
+                href="/laboratories"
+                className="mt-2 inline-flex w-fit items-center gap-1 text-[13px] font-medium text-[#0066FF] hover:underline"
+              >
+                Lihat Lab
+                <GoArrowUpRight
+                  className="size-4 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                  aria-hidden
+                />
+              </Link>
             </div>
-            <div className="flex items-baseline gap-2">
-              <dt className="text-[#0E1116]/60">Mata Pelajaran</dt>
-              <dd className="font-mono text-[#0E1116]">4</dd>
-            </div>
-          </dl>
+          </ScrollReveal> */}
+
+          <ScrollReveal delay={580} duration={600}>
+            <dl className="mt-2 flex flex-wrap gap-x-8 gap-y-3 border-t border-[#0E1116]/8 pt-5 text-[13px] text-[#3F4753]">
+              <div className="flex items-baseline gap-2">
+                <dt className="text-[#0E1116]/60">Asisten</dt>
+                <dd className="font-mono text-[#0E1116]">{aslabCount}</dd>
+              </div>
+              <div className="flex items-baseline gap-2">
+                <dt className="text-[#0E1116]/60">Mata Pelajaran</dt>
+                <dd className="font-mono text-[#0E1116]">4</dd>
+              </div>
+            </dl>
+          </ScrollReveal>
         </div>
 
         {/* Right: CardSwap */}

@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { GoArrowUpRight } from "react-icons/go";
 import { LAB_REGIONS } from "@/lib/data";
+import ScrollReveal from "@/components/ScrollReveal";
 
 // Keyless Google Maps embed: the `q` search query drops a pin on the campus
 // and `output=embed` returns the iframe-friendly map.
@@ -32,7 +33,7 @@ export function MapsSection() {
 
       <div className="container mx-auto max-w-[1240px] px-4 py-24 sm:py-28 lg:py-32">
         {/* Header */}
-        <div className="flex flex-col gap-5">
+        <ScrollReveal delay={50} className="flex flex-col gap-5">
           <span className="inline-flex w-fit items-center gap-2 font-mono text-[11px] uppercase tracking-[0.22em] text-[#0066FF]">
             <span aria-hidden className="size-1.5 rounded-full bg-[#0066FF]" />
             Lokasi
@@ -43,11 +44,13 @@ export function MapsSection() {
           >
             Temukan kami di tiga region.
           </h2>
-        </div>
+        </ScrollReveal>
 
         <div className="mt-14 grid gap-8 lg:grid-cols-[minmax(0,360px)_minmax(0,1fr)] lg:gap-12">
           {/* Region selector */}
-          <div
+          <ScrollReveal
+            as="div"
+            delay={150}
             role="tablist"
             aria-label="Pilih region lab"
             aria-orientation="vertical"
@@ -105,10 +108,12 @@ export function MapsSection() {
                 </button>
               );
             })}
-          </div>
+          </ScrollReveal>
 
           {/* Map panel */}
-          <div
+          <ScrollReveal
+            as="div"
+            delay={250}
             id="region-map-panel"
             role="tabpanel"
             aria-labelledby={`region-tab-${active}`}
@@ -147,7 +152,7 @@ export function MapsSection() {
                 />
               </Link>
             </div>
-          </div>
+          </ScrollReveal>
         </div>
       </div>
 

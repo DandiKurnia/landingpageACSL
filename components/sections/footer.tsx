@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { GoArrowUpRight } from "react-icons/go";
+import ScrollReveal from "@/components/ScrollReveal";
 
 const NAV_GROUPS: {
   heading: string;
@@ -45,7 +46,10 @@ export function FooterSection() {
         }}
       />
 
-      <div className="container mx-auto max-w-[1240px] px-4 pt-20 pb-10 sm:pt-24">
+      <ScrollReveal
+        delay={50}
+        className="container mx-auto max-w-[1240px] px-4 pt-20 pb-10 sm:pt-24"
+      >
         {/* Top: brand statement + nav */}
         <div className="grid gap-12 lg:grid-cols-[minmax(0,1.6fr)_minmax(0,1.0fr)] lg:gap-14">
           {/* Brand */}
@@ -110,7 +114,7 @@ export function FooterSection() {
             Depok · Kalimalang · Karawaci
           </p>
         </div>
-      </div>
+      </ScrollReveal>
     </footer>
   );
 }

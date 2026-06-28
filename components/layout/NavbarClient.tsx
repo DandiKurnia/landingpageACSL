@@ -14,18 +14,8 @@ const items: CardNavItem[] = [
     links: [
       {
         label: "Visi & Misi",
-        href: "/about#visi-misi",
+        href: "/#about",
         ariaLabel: "Visi dan Misi",
-      },
-      {
-        label: "Struktur",
-        href: "/about#struktur",
-        ariaLabel: "Struktur organisasi",
-      },
-      {
-        label: "Fasilitas",
-        href: "/about#fasilitas",
-        ariaLabel: "Fasilitas laboratorium",
       },
     ],
   },
@@ -36,26 +26,8 @@ const items: CardNavItem[] = [
     links: [
       {
         label: "Daftar Lab",
-        href: "/laboratories",
+        href: "/",
         ariaLabel: "Daftar laboratorium",
-      },
-      {
-        label: "Penelitian",
-        href: "/laboratories#penelitian",
-        ariaLabel: "Riset aktif",
-      },
-    ],
-  },
-  {
-    label: "Gallery",
-    bgColor: "#2A2F3A",
-    textColor: "#FFFFFF",
-    links: [
-      { label: "Foto Kegiatan", href: "/gallery", ariaLabel: "Galeri foto" },
-      {
-        label: "Dokumentasi",
-        href: "/gallery#dokumentasi",
-        ariaLabel: "Dokumentasi kegiatan",
       },
     ],
   },
@@ -69,14 +41,15 @@ const items: CardNavItem[] = [
         href: "/team",
         ariaLabel: "Asisten laboratorium aktif",
       },
-      { label: "Alumni", href: "/team#alumni", ariaLabel: "Alumni aslab" },
     ],
   },
 ];
 
 export default function NavbarClient() {
   const pathname = usePathname();
-  if (HIDDEN_PREFIXES.some((p) => pathname === p || pathname.startsWith(`${p}/`))) {
+  if (
+    HIDDEN_PREFIXES.some((p) => pathname === p || pathname.startsWith(`${p}/`))
+  ) {
     return null;
   }
 

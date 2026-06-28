@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { GoArrowUpRight } from "react-icons/go";
+import ScrollReveal from "@/components/ScrollReveal";
 
 type FocusArea = {
   code: string;
@@ -56,7 +57,7 @@ export function AboutSection() {
         {/* Header + statements */}
         <div className="grid gap-12 lg:grid-cols-[minmax(0,400px)_minmax(0,1fr)] lg:gap-16">
           {/* Left rail */}
-          <div className="flex flex-col gap-6">
+          <ScrollReveal delay={50} className="flex flex-col gap-6">
             <span className="inline-flex w-fit items-center gap-2 font-mono text-[11px] uppercase tracking-[0.22em] text-[#0066FF]">
               <span
                 aria-hidden
@@ -77,12 +78,12 @@ export function AboutSection() {
               asisten yang aktif membimbing setiap praktikan di Universitas
               Gunadarma.
             </p>
-          </div>
+          </ScrollReveal>
 
           {/* Right: Visi + Misi */}
           <div className="flex flex-col">
             {/* Visi — the focal statement */}
-            <div className="relative">
+            <ScrollReveal delay={150} className="relative">
               <span
                 aria-hidden
                 className="block h-0.5 w-10 rounded-full bg-[#F5C24A]"
@@ -94,12 +95,12 @@ export function AboutSection() {
                 Menjadi laboratorium unggulan dalam riset teknologi komputasi
                 masa depan.
               </p>
-            </div>
+            </ScrollReveal>
 
             <hr className="my-9 border-0 border-t border-[#0E1116]/10" />
 
             {/* Misi */}
-            <div>
+            <ScrollReveal delay={250}>
               <h3 className="text-[13px] font-medium uppercase tracking-[0.14em] text-[#0E1116]">
                 Misi
               </h3>
@@ -108,25 +109,27 @@ export function AboutSection() {
                 bagi mahasiswa dan dosen, serta mendampingi praktikan menguasai
                 kompetensi inti di setiap mata praktikum.
               </p>
-            </div>
+            </ScrollReveal>
           </div>
         </div>
 
         {/* Focus areas */}
         <div className="mt-16 lg:mt-24">
-          <div className="flex items-baseline justify-between gap-4 border-b border-[#0E1116]/10 pb-4">
+          <ScrollReveal delay={100} className="flex items-baseline justify-between gap-4 border-b border-[#0E1116]/10 pb-4">
             <h3 className="text-[13px] font-medium uppercase tracking-[0.14em] text-[#0E1116]">
               Mata Praktikum
             </h3>
             <span className="font-mono text-[12px] text-[#0E1116]/45">
               4 mata pelajaran
             </span>
-          </div>
+          </ScrollReveal>
 
           <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
-            {FOCUS_AREAS.map((area) => (
-              <li
+            {FOCUS_AREAS.map((area, i) => (
+              <ScrollReveal
+                as="li"
                 key={area.code}
+                delay={i * 100}
                 className="group relative flex flex-col gap-3 border-t border-[#0E1116]/10 py-7 pr-6 lg:py-8"
               >
                 {/* Short top accent tick */}
@@ -155,7 +158,7 @@ export function AboutSection() {
                     aria-hidden
                   />
                 </Link>
-              </li>
+              </ScrollReveal>
             ))}
           </ul>
         </div>

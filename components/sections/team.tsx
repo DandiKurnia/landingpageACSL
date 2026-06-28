@@ -2,6 +2,7 @@ import Link from "next/link";
 import { GoArrowUpRight } from "react-icons/go";
 import { prisma } from "@/lib/prisma";
 import { roleLabel } from "@/lib/roles";
+import ScrollReveal from "@/components/ScrollReveal";
 
 export async function TeamSection() {
   const dbUsers = await prisma.user.findMany({
@@ -65,7 +66,7 @@ export async function TeamSection() {
       <div className="container mx-auto max-w-[1240px] px-4 py-24 sm:py-28 lg:py-32">
         {/* Header */}
         <div className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
-          <div className="flex flex-col gap-5">
+          <ScrollReveal delay={50} className="flex flex-col gap-5">
             <span className="inline-flex w-fit items-center gap-2 font-mono text-[11px] uppercase tracking-[0.22em] text-[#0066FF]">
               <span
                 aria-hidden
@@ -79,23 +80,30 @@ export async function TeamSection() {
             >
               Orang-orang ACSL
             </h2>
-          </div>
-          <Link
-            href="/team"
-            className="group inline-flex w-fit items-center gap-2 text-[14px] font-medium text-[#0066FF] transition-colors duration-200 hover:text-[#0052cc] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0066FF]"
-          >
-            Lihat semua tim
-            <GoArrowUpRight
-              aria-hidden
-              className="size-4 transition-transform duration-200 ease-out group-hover:translate-x-0.5 group-hover:-translate-y-0.5 motion-reduce:transition-none"
-            />
-          </Link>
+          </ScrollReveal>
+          <ScrollReveal delay={150}>
+            <Link
+              href="/team"
+              className="group inline-flex w-fit items-center gap-2 text-[14px] font-medium text-[#0066FF] transition-colors duration-200 hover:text-[#0052cc] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0066FF]"
+            >
+              Lihat semua tim
+              <GoArrowUpRight
+                aria-hidden
+                className="size-4 transition-transform duration-200 ease-out group-hover:translate-x-0.5 group-hover:-translate-y-0.5 motion-reduce:transition-none"
+              />
+            </Link>
+          </ScrollReveal>
         </div>
 
         {/* Member grid */}
         <ul className="mt-14 grid grid-cols-2 gap-x-6 gap-y-10 sm:grid-cols-3 lg:grid-cols-4">
-          {members.map((member) => (
-            <li key={member.name} className="group flex flex-col gap-4">
+          {members.map((member, i) => (
+            <ScrollReveal
+              as="li"
+              key={member.name}
+              delay={i * 80}
+              className="group flex flex-col gap-4"
+            >
               <div className="relative overflow-hidden rounded-xl ring-1 ring-[#0E1116]/8 shadow-sm transition-shadow duration-500 ease-out group-hover:shadow-md">
                 <img
                   src={member.avatar}
@@ -116,7 +124,7 @@ export async function TeamSection() {
                   {member.role}
                 </span>
               </div>
-            </li>
+            </ScrollReveal>
           ))}
         </ul>
       </div>
