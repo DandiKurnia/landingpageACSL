@@ -4,6 +4,8 @@ import { TeamSection } from "@/components/sections/team";
 import { MapsSection } from "@/components/sections/maps";
 import { FooterSection } from "@/components/sections/footer";
 
+export const dynamic = "force-dynamic";
+
 export default function LandingPage() {
   return (
     <main>
